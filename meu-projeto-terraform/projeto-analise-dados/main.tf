@@ -48,3 +48,13 @@ resource "docker_container" "jupyter" {
     name = docker_network.analysis_network.name
   }
 }
+
+#Adminer
+adminer:
+    image: adminer:latest
+    ports:
+       - "8080:8080"
+    depends_on:
+       - postgres
+    networks:
+       - minha-rede
