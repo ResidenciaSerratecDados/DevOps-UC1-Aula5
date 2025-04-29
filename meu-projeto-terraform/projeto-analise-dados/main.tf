@@ -50,11 +50,19 @@ resource "docker_container" "jupyter" {
 }
 
 #Adminer
-adminer:
-    image: adminer:latest
-    ports:
-       - "8080:8080"
-    depends_on:
-       - postgres
-    networks:
-       - minha-rede
+resource "docker_container" "adminer" {
+  name  = "adminer"
+  image = "adminer:latest"
+  ports {
+    internal = 8080
+    external = 8080
+  }
+  volumes {
+    container_path = "/home/jovyan/work"
+    host_path      = "C:\_devops\DevOps-UC1-Aula5\meu-projeto-terraform\projeto-analise-dados\notebooks"
+  }
+  depends_on:
+    - postgres
+  networks:
+    - minha-rede
+}
