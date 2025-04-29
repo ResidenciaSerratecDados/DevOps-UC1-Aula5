@@ -36,6 +36,10 @@ resource "docker_container" "postgres" {
 resource "docker_container" "jupyter" {
   name  = "jupyter_notebook"
   image = "jupyter/datascience-notebook:latest"
+  env   = [
+    "JUPYTER_TOKEN=${var.jupyter_password}", 
+    "JUPYTER_ENABLE_LAB=yes"
+  ]
   ports {
     internal = 8888
     external = 8888
@@ -57,12 +61,7 @@ resource "docker_container" "adminer" {
     internal = 8080
     external = 8080
   }
-  volumes {
-    container_path = "/home/jovyan/work"
-    host_path      = "C:\_devops\DevOps-UC1-Aula5\meu-projeto-terraform\projeto-analise-dados\notebooks"
+  networks_advanced {
+    name = docker_network.analysis_network.name
   }
-  depends_on:
-    - postgres
-  networks:
-    - minha-rede
 }
